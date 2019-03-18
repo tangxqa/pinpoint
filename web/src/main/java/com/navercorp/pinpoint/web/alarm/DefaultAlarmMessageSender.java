@@ -18,11 +18,13 @@ package com.navercorp.pinpoint.web.alarm;
 import com.navercorp.pinpoint.web.alarm.checker.AlarmChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
  * @author minwoo.jung
  */
+@Component
 public class DefaultAlarmMessageSender implements AlarmMessageSender {
 
     @Autowired
