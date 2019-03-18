@@ -16,18 +16,44 @@
 package com.navercorp.pinpoint.web.alarm;
 
 import com.navercorp.pinpoint.web.alarm.checker.AlarmChecker;
+import com.navercorp.pinpoint.web.service.UserGroupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * @author minwoo.jung
  */
 public class EmptySmsSender implements SmsSender {
 
+    @Autowired
+    private UserGroupService userGroupService;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void sendSms(AlarmChecker checker, int sequenceCount) {
-        logger.info("can not send sms message.");
+        List<String> receivers = userGroupService.selectPhoneNumberOfMember(checker.getuserGroupId());
+
+        if (receivers.size() == 0) {
+            return;
+        }
+
+
+        for (String receiver : receivers) {
+            StringBuilder builder = new StringBuilder();
+            for (String msg : checker.getSmsMessage()) {
+                builder.append(msg);
+                builder.append(";");
+            }
+            if (!SmsUtils.sendVerificationCodeForLogin(receiver, builder.toString())) {
+                logger.error("Send sms error for {}", receiver);
+
+            }
+        }
+
+
     }
 }
