@@ -35,6 +35,7 @@ public class EmptySmsSender implements SmsSender {
 
     @Override
     public void sendSms(AlarmChecker checker, int sequenceCount) {
+        logger.info("================== SMS send start ==================");
         List<String> receivers = userGroupService.selectPhoneNumberOfMember(checker.getuserGroupId());
 
         if (receivers.size() == 0) {

@@ -29,6 +29,10 @@
 
 	<bean id="jobFailListener" class="com.navercorp.pinpoint.web.batch.JobFailListener"/>
 
+	<bean id="alarmMessageSender" class="com.navercorp.pinpoint.web.alarm.DefaultAlarmMessageSender"/>
+
+	<bean id="smsSender" class="com.navercorp.pinpoint.web.alarm.EmptySmsSender"/>
+
 	<bean id="mailSender" class="com.navercorp.pinpoint.web.alarm.SpringSmtpMailSender">
 		<constructor-arg ref="batchConfiguration"/>
 		<constructor-arg ref="userGroupServiceImpl"/>

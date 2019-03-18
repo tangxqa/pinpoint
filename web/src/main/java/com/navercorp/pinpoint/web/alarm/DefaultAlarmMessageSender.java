@@ -24,14 +24,13 @@ import org.springframework.util.Assert;
 /**
  * @author minwoo.jung
  */
-@Component
 public class DefaultAlarmMessageSender implements AlarmMessageSender {
 
     @Autowired
     private MailSender mailSender;
 
-    @Autowired(required = false)
-    private SmsSender smsSender = new EmptySmsSender();
+    @Autowired
+    private SmsSender smsSender;
 
     @Override
     public void sendSms(AlarmChecker checker, int sequenceCount) {

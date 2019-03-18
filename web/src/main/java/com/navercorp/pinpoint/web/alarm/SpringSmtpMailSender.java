@@ -63,6 +63,8 @@ public class SpringSmtpMailSender implements MailSender {
 
     @Override
     public void sendEmail(AlarmChecker checker, int sequenceCount) {
+        logger.info("================== Mail send start ==================");
+
         List<String> receivers = userGroupService.selectEmailOfMember(checker.getuserGroupId());
 
         if (receivers.size() == 0) {
