@@ -44,7 +44,7 @@ public class EmptySmsSender implements SmsSender {
 
         for (String receiver : receivers) {
             StringBuilder builder = new StringBuilder();
-            for (String msg : checker.getSmsMessage()) {
+            for (Object msg : checker.getSmsMessage()) {
                 builder.append(msg);
                 builder.append(";");
             }

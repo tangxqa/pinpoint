@@ -34,7 +34,8 @@ public class SmsUtils {
             stringBuffer.append("&loginName="+LOGIN_NAME+"");
             stringBuffer.append("&password="+PASSWORD+"");
             stringBuffer.append("&mobiles="+mobile+"");
-            stringBuffer.append("&content="+URLEncoder.encode("【日日顺平台报警】"+content, "UTF-8"));
+            int randomNum = (int)(Math.random() * 9000 + 1000);
+            stringBuffer.append("&content="+URLEncoder.encode("【日日顺平台报警】"+content + randomNum, "UTF-8"));
             stringBuffer.append("&sendTime=");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
