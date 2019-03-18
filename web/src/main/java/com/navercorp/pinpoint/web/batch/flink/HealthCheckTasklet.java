@@ -15,8 +15,6 @@
  */
 package com.navercorp.pinpoint.web.batch.flink;
 
-import com.navercorp.pinpoint.web.alarm.AlarmMessageSender;
-import com.navercorp.pinpoint.web.alarm.EmptyMessageSender;
 import com.navercorp.pinpoint.web.batch.BatchConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +28,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author minwoo.jung
