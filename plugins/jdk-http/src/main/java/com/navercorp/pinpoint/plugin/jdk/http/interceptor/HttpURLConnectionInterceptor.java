@@ -22,6 +22,7 @@ import com.navercorp.pinpoint.bootstrap.interceptor.scope.InterceptorScope;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
 import com.navercorp.pinpoint.bootstrap.plugin.request.*;
+import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.jdk.http.*;
 
 import java.net.HttpURLConnection;
@@ -68,6 +69,13 @@ public class HttpURLConnectionInterceptor implements AroundInterceptor {
         }
 
         final HttpURLConnection request = (HttpURLConnection) target;
+
+        //转发用户ip
+        String userRealIP = ThreadLocalAttrContainer.getInstance().getUserRealIP().get();
+        if (!StringUtils.isEmpty(userRealIP)) {
+            request.setRequestProperty(ThreadLocalAttrContainer.ATTR_KEY_IP_APPPLAT, userRealIP);
+        }
+
         boolean connected = false;
         if (target instanceof ConnectedGetter) {
             connected = ((ConnectedGetter) target)._$PINPOINT$_isConnected();

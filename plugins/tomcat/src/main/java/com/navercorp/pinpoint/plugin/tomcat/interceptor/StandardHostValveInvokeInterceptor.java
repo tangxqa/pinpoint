@@ -23,8 +23,10 @@ import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
 import com.navercorp.pinpoint.bootstrap.plugin.request.RequestAdaptor;
 import com.navercorp.pinpoint.bootstrap.plugin.request.ServletRequestListenerInterceptorHelper;
+import com.navercorp.pinpoint.bootstrap.plugin.request.ThreadLocalAttrContainer;
 import com.navercorp.pinpoint.bootstrap.plugin.request.util.ParameterRecorder;
 import com.navercorp.pinpoint.bootstrap.plugin.request.util.RemoteAddressResolverFactory;
+import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.common.servlet.util.ArgumentValidator;
 import com.navercorp.pinpoint.plugin.common.servlet.util.HttpServletRequestAdaptor;
 import com.navercorp.pinpoint.plugin.common.servlet.util.ParameterRecorderFactory;
@@ -73,6 +75,15 @@ public class StandardHostValveInvokeInterceptor implements AroundInterceptor {
 
         try {
             final HttpServletRequest request = (HttpServletRequest) args[0];
+            String realIPNginx = request.getHeader(ThreadLocalAttrContainer.ATTR_KEY_IP_NGINX); //来自nginx转发后的请求者ip
+            String realIPAppplat = request.getHeader(ThreadLocalAttrContainer.ATTR_KEY_IP_APPPLAT); //来自appplat服务转发后的请求者ip
+            //用户请求要么转发自nginx，要么由其他java服务进行分布式调用，不考虑ip+服务port 直接访问的情况
+            if (StringUtils.isEmpty(realIPAppplat)) {
+                ThreadLocalAttrContainer.getInstance().getUserRealIP().set(realIPNginx);
+            } else {
+                ThreadLocalAttrContainer.getInstance().getUserRealIP().set(realIPAppplat);
+            }
+
             final Trace asyncTrace = (Trace) request.getAttribute(TomcatConstants.TOMCAT_SERVLET_REQUEST_TRACE);
             if (asyncTrace != null) {
                 if (isDebug) {
