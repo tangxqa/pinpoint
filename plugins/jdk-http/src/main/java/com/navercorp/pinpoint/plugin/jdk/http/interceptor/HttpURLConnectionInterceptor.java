@@ -70,12 +70,6 @@ public class HttpURLConnectionInterceptor implements AroundInterceptor {
 
         final HttpURLConnection request = (HttpURLConnection) target;
 
-        //转发用户ip
-        String userRealIP = ThreadLocalAttrContainer.getInstance().getUserRealIP().get();
-        if (!StringUtils.isEmpty(userRealIP)) {
-            request.setRequestProperty(ThreadLocalAttrContainer.ATTR_KEY_IP_APPPLAT, userRealIP);
-        }
-
         boolean connected = false;
         if (target instanceof ConnectedGetter) {
             connected = ((ConnectedGetter) target)._$PINPOINT$_isConnected();
@@ -87,6 +81,12 @@ public class HttpURLConnectionInterceptor implements AroundInterceptor {
 
         if (connected || connecting) {
             return;
+        }
+
+        //转发用户ip
+        String userRealIP = ThreadLocalAttrContainer.getInstance().getUserRealIP().get();
+        if (!StringUtils.isEmpty(userRealIP)) {
+            request.setRequestProperty(ThreadLocalAttrContainer.ATTR_KEY_IP_APPPLAT, userRealIP);
         }
 
         final boolean sampling = trace.canSampled();
